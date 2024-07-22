@@ -11,7 +11,7 @@ export const Footer = observer(({ model }: FooterProps) => {
   console.log(model)
   return (
     <div className="mt-auto bg-milky font-body text-brown dark:bg-dark-900 dark:text-dark-50">
-      <div className="mx-auto w-full max-w-screen-lg justify-center px-8 py-8 sm:flex sm:flex-row-reverse sm:items-start sm:px-0">
+      <div className="mx-auto w-full max-w-screen-lg justify-center sm:flex sm:flex-row-reverse sm:items-start sm:px-0">
         <div className="grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-4">
           <div className="mx-8 my-4">
             <h3 className="font-bold text-orange dark:text-brown">Social</h3>

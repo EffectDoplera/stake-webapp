@@ -8,6 +8,7 @@ import { Header } from '@/widgets/header'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import type { Model } from './Model'
+import { Stats } from './stats'
 
 interface AppProps {
   model: Model
@@ -19,7 +20,7 @@ const App = observer(({ model }: AppProps) => {
   return (
     <>
       <Header model={model} />
-      <main className="grid place-content-center text-4xl gap-4">
+      <main className="grid place-content-center text-4xl gap-4 mx-auto w-full max-w-screen-lg">
         <div className="text-center">
           <h1 className="pt-4 text-center text-3xl font-bold">Rhino</h1>
           <p className="my-8 text-center">Stake TON and receive rTON while staking</p>
@@ -189,6 +190,7 @@ const App = observer(({ model }: AppProps) => {
             </div>
           </Label>
         </div>
+        <Stats model={model} />
       </main>
       <Footer model={model} />
     </>
