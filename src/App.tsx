@@ -147,6 +147,8 @@ const App = observer(({ model }: AppProps) => {
                 }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && model.isButtonEnabled) {
+                    // TEST
+                    model.writeCounterValue(Number.parseInt(model.amount, 10))
                     const button = document.querySelector<HTMLInputElement>('#submit')
                     if (button != null) {
                       button.click()

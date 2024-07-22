@@ -1,17 +1,32 @@
-import { Address, fromNano, toNano } from '@ton/ton'
+import { getHttpV4Endpoint, Network } from '@orbs-network/ton-access'
+import { Address, beginCell, fromNano, SenderArguments, storeStateInit, toNano, TonClient4 } from '@ton/ton'
 import { CHAIN, THEME, TonConnectUI } from '@tonconnect/ui'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { autorun, makeAutoObservable, runInAction } from 'mobx'
+import { SimpleCounter } from './blockchain/wrappers/SimpleCounter'
 
 const tonConnectButtonRootId = 'ton-connect-button'
 
+const UPDATE_TIMES_DELAY = 5 * 60 * 1000
+// const RETRY_DELAY = 3 * 1000
+const DEFAULT_TTL = 5 * 60 * 1000
+
 export class Model {
+  network: Network = 'testnet'
+  tonClient?: TonClient4
   tonConnectUI?: TonConnectUI
   tonBalance?: bigint
   amount = ''
   address?: Address
+  value?: bigint
+
+  timeoutConnectTonAccess?: ReturnType<typeof setTimeout>
+  timeoutReadTimes?: ReturnType<typeof setTimeout>
 
   constructor() {
-    makeAutoObservable(this)
+    makeAutoObservable(this, {
+      timeoutConnectTonAccess: false,
+      timeoutReadTimes: false,
+    })
   }
 
   get isWalletConnected() {
@@ -89,6 +104,12 @@ export class Model {
     return 'https://testnet.tonviewer.com/'
   }
 
+  get formatedValue() {
+    if (this.value != null) {
+      return this.value.toLocaleString()
+    }
+  }
+
   setAmount = (amount: string) => {
     this.amount = amount
   }
@@ -97,13 +118,33 @@ export class Model {
     this.amount = fromNano(this.maxAmount)
   }
 
+  setValue = (value?: bigint) => {
+    this.value = value
+  }
+
   setAddress = (address?: Address) => {
     this.address = address
     this.tonBalance = undefined
   }
 
+  setTonClient = (endpoint: string) => {
+    this.tonClient = new TonClient4({ endpoint })
+  }
+
   init = () => {
     this.initTonConnect()
+
+    autorun(() => {
+      this.connectTonAccess()
+    })
+
+    autorun(() => {
+      console.log('val', this.value)
+    })
+
+    autorun(() => {
+      this.readCounterValue()
+    })
   }
 
   initTonConnect = () => {
@@ -151,6 +192,98 @@ export class Model {
       }
     })
   }
+
+  connectTonAccess = () => {
+    const network = this.network
+    clearTimeout(this.timeoutConnectTonAccess)
+    if (document.hidden) {
+      return
+    }
+    getHttpV4Endpoint({ network })
+      .then(this.setTonClient)
+      .catch(() => {
+        // this.timeoutConnectTonAccess = setTimeout(this.connectTonAccess, RETRY_DELAY)
+      })
+  }
+
+  readCounterValue = async () => {
+    const tonClient = this.tonClient
+    const counterAddress = 'EQChHss_qFXJI3xqct2ef8I8js1IzRdvk6-N01AUcsuRxp7F'
+    clearTimeout(this.timeoutReadTimes)
+    if (document.hidden) {
+      return
+    }
+    this.timeoutReadTimes = setTimeout(this.readCounterValue, UPDATE_TIMES_DELAY)
+
+    if (tonClient == null || counterAddress == null) {
+      this.setValue(undefined)
+      return
+    }
+
+    tonClient
+      .open(SimpleCounter.fromAddress(Address.parse(counterAddress)))
+      .getValue()
+      .then(this.setValue)
+    // .catch(() => {
+    //   clearTimeout(this.timeoutReadTimes)
+    //   this.timeoutReadTimes = setTimeout(this.readCounterValue, RETRY_DELAY)
+    // })
+  }
+
+  writeCounterValue = async (value: number) => {
+    const tonClient = this.tonClient
+    const counterAddress = 'EQChHss_qFXJI3xqct2ef8I8js1IzRdvk6-N01AUcsuRxp7F'
+    if (document.hidden) {
+      return
+    }
+
+    if (tonClient == null || counterAddress == null) {
+      return
+    }
+
+    const sender = {
+      send: async (args: SenderArguments) => {
+        this.tonConnectUI!.sendTransaction({
+          messages: [
+            {
+              address: args.to.toString(),
+              amount: args.value.toString(10),
+              stateInit: args.init
+                ? beginCell().storeWritable(storeStateInit(args.init)).endCell().toBoc().toString('base64')
+                : undefined,
+              payload: args.body?.toBoc().toString('base64'),
+            },
+          ],
+          validUntil: Date.now() + DEFAULT_TTL,
+        })
+      },
+      address: this.tonConnectUI!.account ? Address.parse(this.tonConnectUI!.account.address) : undefined,
+    }
+
+    tonClient
+      .open(SimpleCounter.fromAddress(Address.parse(counterAddress)))
+      .send(
+        sender,
+        {
+          value: toNano('0.05'),
+        },
+        {
+          $$type: 'Add',
+          amount: toNano(fromNano(value)),
+        },
+      )
+      .then(async () => {
+        const prevValue = this.value
+        while (this.value === prevValue) {
+          await sleep(3500)
+          this.readCounterValue()
+        }
+      })
+  }
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 function formatPercent(amount: number): string {

@@ -52,6 +52,10 @@ export const Stats = observer(({ model }: StatProps) => {
             <p>Currently staked</p>
             <p className="ml-auto">{model.currentlyStaked}</p>
           </div>
+          <div className="my-4 flex flex-row">
+            <p>Currently value</p>
+            <p className="ml-auto">{model.formatedValue}</p>
+          </div>
           <div className="flex flex-row justify-center">
             <p>
               <a href="https://stats.hipo.finance" className="text-blue" target="rhino_stats">
