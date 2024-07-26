@@ -50,7 +50,7 @@ export const Stats = observer(() => {
 
           <div className="flex flex-row justify-center">
             <p>
-              <a href="https://stats.hipo.finance" className="text-cyan-400" target="rhino_stats">
+              <a href="#" className="text-cyan-400" target="rhino_stats">
                 More Stats
               </a>
             </p>

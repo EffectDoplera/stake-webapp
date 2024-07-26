@@ -1,1 +1,1 @@
-export { StakeProvider, useStake } from './provider'
+export { StakeStore } from './store'

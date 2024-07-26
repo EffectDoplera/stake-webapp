@@ -1,2 +1,2 @@
 export { Stake } from './ui'
-export { StakeProvider } from './model'
+export { StakeStore } from './model'

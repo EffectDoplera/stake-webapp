@@ -1,6 +1,6 @@
 import { Stats } from '@/entities/stats'
 import { ToggleTransactionType, ToggleTransactionTypeProvider } from '@/feature/toggle-transaction-type'
-import { Stake, StakeProvider } from '@/widgets/stake'
+import { Stake } from '@/widgets/stake'
 
 export const RootPage = () => {
   return (
@@ -11,11 +11,7 @@ export const RootPage = () => {
       </div>
 
       <ToggleTransactionType />
-
-      <StakeProvider>
-        <Stake />
-      </StakeProvider>
-
+      <Stake />
       <Stats />
     </ToggleTransactionTypeProvider>
   )

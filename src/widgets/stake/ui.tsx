@@ -1,3 +1,4 @@
+import { useRootStore } from '@/app/providers'
 import hton from '@/assets/hton.svg'
 import ton from '@/assets/ton.svg'
 import { useToggleTransactionType } from '@/feature/toggle-transaction-type'
@@ -6,11 +7,13 @@ import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
 import { observer } from 'mobx-react-lite'
-import { useStake } from './model'
 
 export const Stake = observer(() => {
   const { isStaking } = useToggleTransactionType()
-  const { isAmountValid, amount, setAmount, isButtonEnabled, setAmountToMax, writeCounterValue } = useStake()
+  const {
+    stakeStore: { isAmountValid, amount, setAmount, isButtonEnabled, setAmountToMax },
+    tonCounterStore: { writeCounterValue },
+  } = useRootStore()
 
   return (
     <div className="flex flex-col flex-1 p-5 relative will-change-transform break-words transition-all shadow-sm rounded-card border-[#41403e] border-2 border-solid">
