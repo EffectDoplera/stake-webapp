@@ -1,5 +1,5 @@
 import { RootStore } from '@/app/store'
-import { SimpleCounter } from '@/blockchain/wrappers/SimpleCounter'
+import { SimpleCounter } from '@/shared/blockchain'
 import { sleep } from '@/shared/lib'
 import { Address, beginCell, fromNano, SenderArguments, storeStateInit, toNano } from '@ton/ton'
 import { autorun, makeAutoObservable } from 'mobx'
