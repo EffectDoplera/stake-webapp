@@ -6,7 +6,7 @@ export const TonCounter = observer(() => {
 
   return (
     <div className="flex flex-row justify-between">
-      <p>Currently value</p>
+      <p>Currently staked [DEMO]</p>
       <p>{tonCounterStore.formatedValue}</p>
     </div>
   )

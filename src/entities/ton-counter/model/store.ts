@@ -26,7 +26,14 @@ export class TonCounterStore {
 
   get formatedValue() {
     if (this.value !== null) {
-      return this.value.toLocaleString()
+      return Intl.NumberFormat(undefined, {
+        maximumFractionDigits: 0,
+        style: 'currency',
+        currency: 'USD',
+        currencyDisplay: 'code',
+      })
+        .format(this.value)
+        .replace('USD', 'TON')
     }
   }
 
