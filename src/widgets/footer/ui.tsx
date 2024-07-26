@@ -1,14 +1,7 @@
-// import logoDark from './assets/logo-dark.svg'
 import logo from '@/assets/logo_transparent.webp'
-import { Model } from '@/Model'
 import { observer } from 'mobx-react-lite'
 
-interface FooterProps {
-  model: Model
-}
-
-export const Footer = observer(({ model }: FooterProps) => {
-  console.log(model)
+export const Footer = observer(() => {
   return (
     <div className="mt-auto bg-milky font-body text-brown dark:bg-dark-900 dark:text-dark-50">
       <div className="mx-auto w-full max-w-screen-lg justify-center sm:flex sm:flex-row-reverse sm:items-start sm:px-0">
@@ -67,8 +60,7 @@ export const Footer = observer(({ model }: FooterProps) => {
           className="mx-8 my-8 flex select-none flex-row items-center gap-4 pb-16 font-logo text-2xl dark:text-orange"
           // onClick={model.switchNetwork}
         >
-          <img src={logo} className="-ml-4 -mr-3 h-20 dark:hidden" />
-          {/* <img src={logoDark} className="-ml-4 -mr-3 hidden h-20 dark:block" /> */}
+          <img src={logo} className="-ml-4 -mr-3 h-20" />
           <p>Rhino</p>
         </div>
       </div>

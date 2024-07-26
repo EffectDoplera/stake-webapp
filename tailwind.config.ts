@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import plugin from 'tailwindcss/plugin'
 
 export default {
   darkMode: ['class'],
@@ -55,6 +56,7 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        card: '255px 15px 225px 15px / 15px 225px 15px 255px',
       },
       keyframes: {
         'accordion-down': {
@@ -72,5 +74,36 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        '.backface-visible': {
+          'backface-visibility': 'visible',
+          '-moz-backface-visibility': 'visible',
+          '-webkit-backface-visibility': 'visible',
+          '-ms-backface-visibility': 'visible',
+        },
+        '.backface-hidden': {
+          'backface-visibility': 'hidden',
+          '-moz-backface-visibility': 'hidden',
+          '-webkit-backface-visibility': 'hidden',
+          '-ms-backface-visibility': 'hidden',
+        },
+      })
+    }),
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        '.rotate-x-180': {
+          transform: 'rotateX(180deg)',
+        },
+        '.preserve-3d': {
+          transformStyle: 'preserve-3d',
+        },
+        '.perspective': {
+          perspective: '1000px',
+        },
+      })
+    }),
+  ],
 } satisfies Config
