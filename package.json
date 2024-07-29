@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource/patrick-hand-sc": "^5.0.20",
     "@fontsource/poppins": "^5.0.14",
+    "@hookform/resolvers": "^3.9.0",
     "@orbs-network/ton-access": "^2.3.3",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-label": "^2.1.0",
@@ -26,9 +27,11 @@
     "mobx-react-lite": "^4.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.52.1",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "vite-plugin-node-stdlib-browser": "^0.2.1"
+    "vite-plugin-node-stdlib-browser": "^0.2.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
