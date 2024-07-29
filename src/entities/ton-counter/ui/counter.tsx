@@ -5,9 +5,9 @@ export const TonCounter = observer(() => {
   const { tonCounterStore } = useRootStore()
 
   return (
-    <div className="flex flex-row justify-between">
+    <div className="flex flex-row justify-between items-center text-fuchsia-600">
       <p>Currently staked [DEMO]</p>
-      <p>{tonCounterStore.formatedValue}</p>
+      <p className="text-xl border-2 border-dotted border-fuchsia-600 px-2">{tonCounterStore.formatedValue}</p>
     </div>
   )
 })
